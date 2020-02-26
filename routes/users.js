@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
+const passport = require("passport")
+
 
 //Mongoose works when we create models & call methods on that model
 const User = require("../models/User"); //.. means we go ouside routes folder
@@ -43,9 +46,69 @@ res.render("register", {
 
 });
 }else {
+
     //To validate user
+    User.findOne ({ email: email})
+    .then(user => {
+        if(user){
+
+            // User exists
+            errors.push({ msg: "This email has already been registered"});
+            res.render("register", {
+                errors,
+                name,
+                email,
+                password,
+                password2
+            
+            });
+        } else {
+            const newUser = new User({
+                name,
+                email,
+                password
+            });
+            
+            // Enscrypt password
+            bcrypt.genSalt(10, (err, salt)=> 
+                bcrypt.hash(newUser.password, salt, (err, hash)=>{
+                    if(err) throw err;
+
+            //Password set to hash
+                    newUser.password = hash;
+
+            //new user saved to mongoDB database and redireced to login page
+            newUser.save()
+            .then(user => {
+                req.flash("success_msg", "You are registered, Please login");
+                res.redirect("/users/login");
+            })
+            .catch(err => console.log(err));
+
+
+            }))
+        }
+    });
 
 }
 
+});
+
+//Login handle, after user click login
+router.post("/login", (req, res, next)=>{
+    passport.authenticate("local", {
+        successRedirect: "/backpage",
+        failureRedirect: "/users/login",
+        failureFlash: true
+
+    })(req, res, next);
+});
+
+
+//Logout Handle
+router.get("/logout", (req, res)=> {
+    req.logout();
+    req.flash("success_msg", "You are now logged out");
+    res.redirect("/users/login");
 });
 module.exports = router;

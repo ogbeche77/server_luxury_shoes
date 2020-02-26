@@ -1,8 +1,15 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
+const flash = require("connect-flash");
+const session = require("express-session");
+const passport = require("passport");
 
 const app = express();
+
+//passport configuration
+require("./config/passport")(passport);
+
 
 //Database configuration
 const db = require("./config/key").MongoURI;
@@ -22,6 +29,30 @@ app.set("view engine", "ejs");
 //add bodyparser
 app.use(express.urlencoded ({ extended: false}));
 
+// Express session middleware (gotten from github express session readme page)
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true
+  }));
+
+//PassportJS middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
+  // Connect flash messaging
+  app.use(flash());
+
+//Global Variables
+app.use((req, res, next)=>{
+    res.locals.success_msg = req.flash("success_msg");
+    res.locals.error_msg = req.flash("error_msg");
+    res.locals.error = req.flash("error");
+    next();
+});
 
 
 //Routes
