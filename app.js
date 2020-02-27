@@ -19,12 +19,21 @@ mongoose.connect(db, {useNewUrlParser: true})
 .then(()=> console.log("MongoDB is still connected"))
 .catch(err => console.log(err));
 
-
+app.use(express.static("public"));
 
 
 //EJS
 app.use(expressLayouts);
 app.set("view engine", "ejs");
+
+
+
+
+app.get("/", function (req, res){
+  res.sendFile(__dirname + "/index.html");
+})
+
+
 
 //add bodyparser
 app.use(express.urlencoded ({ extended: false}));
