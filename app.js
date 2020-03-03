@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require("express"); //handles routing, handling requests and views
 const expressLayouts = require("express-ejs-layouts");
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); //for modelling, used with mongoDB to provide backend for Nodejs app
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
@@ -29,7 +29,7 @@ app.set("view engine", "ejs");
 
 
 
-app.get("/", function (req, res){
+app.get("/home", function (req, res){
   res.sendFile(__dirname + "/index.html");
 })
 
