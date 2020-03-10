@@ -4,6 +4,8 @@ const mongoose = require("mongoose"); //for modelling, used with mongoDB to prov
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
+const path = require("path");
+
 
 const app = express();
 
@@ -19,7 +21,7 @@ mongoose.connect(db, {useNewUrlParser: true})
 .then(()=> console.log("MongoDB is still connected"))
 .catch(err => console.log(err));
 
-app.use(express.static("public"));
+/*app.use(express.static("public"));*/
 
 
 //EJS
@@ -27,12 +29,18 @@ app.use(expressLayouts);
 app.set("view engine", "ejs");
 
 
+app.use(express.static("public"));
 
+    app.get("/", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "public", "index.html"));
 
-app.get("/home", function (req, res){
+    });
+
+/*
+app.get("/", function (req, res){
   res.sendFile(__dirname + "/index.html");
 })
-
+*/
 
 
 //add bodyparser
