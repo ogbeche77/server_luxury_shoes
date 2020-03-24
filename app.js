@@ -6,6 +6,8 @@ const session = require("express-session");
 const passport = require("passport");
 const path = require("path");
 
+require("dotenv").config();
+
 
 const app = express();
 
@@ -76,6 +78,6 @@ app.use((req, res, next)=>{
 app.use("/", require("./routes/front"));
 app.use("/users", require("./routes/users"));
 
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 5400;
 
 app.listen(PORT, console.log(`Server has started on port ${PORT}`));
