@@ -60,8 +60,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-
   // Connect flash messaging
   app.use(flash());
 
