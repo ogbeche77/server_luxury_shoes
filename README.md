@@ -10,8 +10,6 @@
 ## General info
 Login & Logout with authentication and encryption (PassportJS). Database support provided by MongoDB.
 
-
-
 ## Technologies
 * bcryptjs - version 2.4.3
 * connect-flash- version 0.1.1
